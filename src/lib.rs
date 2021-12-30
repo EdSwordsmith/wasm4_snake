@@ -38,10 +38,6 @@ fn update() {
     snake.tick();
     snake.draw();
 
-    set_draw_color(3);
-    text((snake.size - 1).to_string(), 1, 1);
-    
-
     // draw fruit
     set_draw_color(4);
     draw_cell(*fruit);
