@@ -38,6 +38,11 @@ fn update() {
     snake.tick();
     snake.draw();
 
+    let mut buffer = itoa::Buffer::new();
+    let score = buffer.format(snake.size - 1);
+    set_draw_color(3);
+    text(score, 1, 1);
+
     // draw fruit
     set_draw_color(4);
     draw_cell(*fruit);
