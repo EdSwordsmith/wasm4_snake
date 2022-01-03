@@ -38,10 +38,16 @@ fn update() {
     snake.tick();
     snake.draw();
 
-    let mut buffer = itoa::Buffer::new();
-    let score = buffer.format(snake.size - 1);
+    // Draw score
+    let mut buffer = [0_u8; 4];
+    let mut score = snake.size - 1;
+    for byte in buffer.iter_mut().rev() {
+        *byte = 48 + (score % 10) as u8;
+        score = score / 10;
+    }
+    let score_text = unsafe { std::str::from_utf8_unchecked(&buffer) };
     set_draw_color(3);
-    text(score, 1, 1);
+    text(score_text, 1, 1);
 
     // draw fruit
     set_draw_color(4);
