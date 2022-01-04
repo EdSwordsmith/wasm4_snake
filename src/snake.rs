@@ -52,16 +52,16 @@ impl Snake {
         self.body[0] = self.body[0] + self.vel;
 
         // Wrap movement
-        if self.body[0].x >= GAME_SIZE as i32 {
+        if self.body[0].x >= GAME_SIZE as i8 {
             self.body[0].x = 0;
         } else if self.body[0].x < 0 {
-            self.body[0].x = (GAME_SIZE - 1) as i32;
+            self.body[0].x = (GAME_SIZE - 1) as i8;
         }
 
-        if self.body[0].y >= GAME_SIZE as i32 {
+        if self.body[0].y >= GAME_SIZE as i8 {
             self.body[0].y = 0;
         } else if self.body[0].y < 0 {
-            self.body[0].y = (GAME_SIZE - 1) as i32;
+            self.body[0].y = (GAME_SIZE - 1) as i8;
         }
 
         // Check for collisions with the body
@@ -79,8 +79,8 @@ impl Snake {
         if let Some(rng) = rng {
             if self.body[0] == *fruit {
                 self.grow();
-                fruit.x = rng.gen_range(0..GAME_SIZE) as i32;
-                fruit.y = rng.gen_range(0..GAME_SIZE) as i32;
+                fruit.x = rng.gen_range(0..GAME_SIZE) as i8;
+                fruit.y = rng.gen_range(0..GAME_SIZE) as i8;
             }
         }
     }
