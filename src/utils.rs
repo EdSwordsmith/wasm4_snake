@@ -28,8 +28,8 @@ pub fn set_draw_color(color: u16) {
 
 pub fn draw_cell(pos: Vec2) {
     rect(
-        (pos.x * (CELL_SIZE as i8)) as i32,
-        (pos.y * (CELL_SIZE as i8)) as i32,
+        ((pos.x as u32) * CELL_SIZE) as i32,
+        ((pos.y as u32) * CELL_SIZE) as i32,
         CELL_SIZE,
         CELL_SIZE,
     );
