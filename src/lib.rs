@@ -1,13 +1,13 @@
-#[cfg(feature = "buddy-alloc")]
-mod alloc;
+#![no_std]
+
 mod wasm4;
-use wasm4::*;
-
-use rand::{Rng, SeedableRng};
-use rand_pcg::Pcg32;
-
 mod snake;
 mod utils;
+
+use core::str::from_utf8_unchecked;
+use wasm4::*;
+use rand::{Rng, SeedableRng};
+use rand_pcg::Pcg32;
 
 use crate::snake::*;
 use crate::utils::*;
@@ -45,7 +45,7 @@ fn update() {
         *byte = 48 + (score % 10) as u8;
         score = score / 10;
     }
-    let score_text = unsafe { std::str::from_utf8_unchecked(&buffer) };
+    let score_text = unsafe { from_utf8_unchecked(&buffer) };
     set_draw_color(3);
     text(score_text, 1, 1);
 

@@ -1,4 +1,4 @@
-use std::ops;
+use core::panic::PanicInfo;
 
 use crate::wasm4::*;
 use crate::*;
@@ -9,17 +9,6 @@ pub struct Vec2 {
     pub y: i8,
 }
 
-impl ops::Add<Vec2> for Vec2 {
-    type Output = Vec2;
-
-    fn add(self, rhs: Vec2) -> Self::Output {
-        let mut vec = self;
-        vec.x += rhs.x;
-        vec.y += rhs.y;
-        vec
-    }
-}
-
 pub fn set_draw_color(color: u16) {
     unsafe {
         *DRAW_COLORS = color;
@@ -27,10 +16,12 @@ pub fn set_draw_color(color: u16) {
 }
 
 pub fn draw_cell(pos: Vec2) {
-    rect(
-        ((pos.x as u32) * CELL_SIZE) as i32,
-        ((pos.y as u32) * CELL_SIZE) as i32,
-        CELL_SIZE,
-        CELL_SIZE,
-    );
+    let x = ((pos.x as u32) * CELL_SIZE) as i32;
+    let y = ((pos.y as u32) * CELL_SIZE) as i32;
+    rect(x, y, CELL_SIZE, CELL_SIZE);
+}
+
+#[panic_handler]
+fn panic(_: &PanicInfo) -> ! {
+    loop {}
 }

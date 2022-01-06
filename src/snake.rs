@@ -49,7 +49,8 @@ impl Snake {
             self.body[i] = prev[1];
         }
 
-        self.body[0] = self.body[0] + self.vel;
+        self.body[0].x += self.vel.x;
+        self.body[0].y += self.vel.y;
 
         // Wrap movement
         if self.body[0].x >= GAME_SIZE as i8 {
