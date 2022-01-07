@@ -3,27 +3,25 @@ use crate::wasm4::*;
 use crate::*;
 
 pub struct Snake {
-    pub body: [Vec2; MAX_SIZE],
+    body: [Vec2; MAX_SIZE],
     pub size: usize,
-    pub vel: Vec2,
-    pub frames: u8,
+    vel: Vec2,
+    frames: u8,
 }
 
-#[macro_export]
-macro_rules! new_snake {
-    () => {{
+impl Snake {
+    pub const fn new() -> Self {
         let mut body = [Vec2 { x: 0, y: 0 }; MAX_SIZE];
         body[0].x = 1;
+
         Snake {
             body,
             size: 2,
             vel: Vec2 { x: 1, y: 0 },
             frames: 0,
         }
-    }};
-}
+    }
 
-impl Snake {
     fn handle_input(&mut self) {
         let gamepad = unsafe { *GAMEPAD1 };
         if gamepad & BUTTON_RIGHT != 0 && self.vel.y != 0 {
@@ -75,14 +73,11 @@ impl Snake {
 
     fn handle_fruit(&mut self) {
         let fruit = unsafe { &mut FRUIT };
-        let rng = unsafe { &mut RNG };
 
-        if let Some(rng) = rng {
-            if self.body[0] == *fruit {
-                self.grow();
-                fruit.x = rng.gen_range(0..GAME_SIZE) as i8;
-                fruit.y = rng.gen_range(0..GAME_SIZE) as i8;
-            }
+        if self.body[0] == *fruit {
+            self.grow();
+            fruit.x = randrange(GAME_SIZE as u64) as i8;
+            fruit.y = randrange(GAME_SIZE as u64) as i8;
         }
     }
 
@@ -92,7 +87,7 @@ impl Snake {
     }
 
     pub fn tick(&mut self) {
-        self.frames = (self.frames + 1) % 60;
+        self.frames = self.frames.wrapping_add(1);
         if self.frames % FPS != 0 {
             return;
         }

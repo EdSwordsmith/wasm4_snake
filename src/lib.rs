@@ -1,13 +1,11 @@
 #![no_std]
 
-mod wasm4;
 mod snake;
 mod utils;
+mod wasm4;
 
 use core::str::from_utf8_unchecked;
 use wasm4::*;
-use rand::{Rng, SeedableRng};
-use rand_pcg::Pcg32;
 
 use crate::snake::*;
 use crate::utils::*;
@@ -17,17 +15,18 @@ const GAME_SIZE: u32 = SCREEN_SIZE / CELL_SIZE;
 const MAX_SIZE: usize = (GAME_SIZE * GAME_SIZE) as usize;
 const FPS: u8 = 5;
 
-static mut SNAKE: Snake = new_snake!();
-static mut FRUIT: Vec2 = Vec2 { x: 20, y: 20 };
-static mut RNG: Option<Pcg32> = None;
+static mut SNAKE: Snake = Snake::new();
+static mut FRUIT: Vec2 = Vec2 { x: 0, y: 0 };
 
 #[no_mangle]
 fn start() {
-    let rng = unsafe { &mut RNG };
-    *rng = Some(Pcg32::seed_from_u64(0));
+    let fruit = unsafe { &mut FRUIT };
     unsafe {
         *PALETTE = [0xe5dcc8, 0x0b7a75, 0x19535f, 0x7b2d26];
     }
+
+    fruit.x = randrange(GAME_SIZE as u64) as i8;
+    fruit.y = randrange(GAME_SIZE as u64) as i8;
 }
 
 #[no_mangle]
